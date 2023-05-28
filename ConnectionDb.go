@@ -7,7 +7,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func getConnectionDb() *sql.DB {
+func GetConnectionDb() *sql.DB {
 
 	db, err := sql.Open("mysql", "root:rifkiganteng@/belajar_golang_database?parseTime=true")
 	if err != nil {

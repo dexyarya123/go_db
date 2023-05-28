@@ -197,3 +197,35 @@ func TestPrepareStatemant(t *testing.T) {
 	}
 
 }
+
+func TestTransaction(t *testing.T) {
+	db := getConnectionDb()
+	ctx := context.Background()
+
+	defer db.Close()
+	tx, err := db.Begin()
+	if err != nil {
+		panic(err.Error())
+	}
+	//  do transaction
+	for i := 0; i < 10; i++ {
+		email := "koko" + strconv.Itoa(i) + "@gmail.com"
+		comment := "Rifki gaanteng Banget sih" + strconv.Itoa(i)
+		querySql := "INSERT INTO comments(email,comment) VALUES(?,?)"
+		result, err := tx.ExecContext(ctx, querySql, email, comment)
+		if err != nil {
+			panic(err.Error())
+		}
+		lastChildId, err := result.LastInsertId()
+		if err != nil {
+			panic(err.Error())
+		}
+		fmt.Println("ini adalah Id Terakhur", lastChildId)
+
+	}
+
+	err = tx.Rollback()
+	if err != nil {
+		panic(err.Error())
+	}
+}
